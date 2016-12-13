@@ -1,0 +1,28 @@
+CompSec Project 2 Notes:
+
+For this project, I’m using a relatively newer installation of Arch. This means that I may run into trouble with, as the top of this tutorial indicates, newer versions of Linux. 
+
+Some assembly required
+I began by compiling and running the provided shell.c code. Understanding the assembly code: it seems to load the string bin/sh into somewhere in memory, and then executes it by using the sys call command, which I think executes whatever is in a certain register. I also understand the idea of labeling and using the hex code 0xdeadbeef to mark where in memory it is.
+
+At first, I did not think that it was working at all. I began to do the rest and was running into trouble. Then I discovered that it was running the whole time and I’d been trying to do the rest of the commands from within the execvp shell! (It seemed to be missing some environment variables).
+
+When I run objdump, the output is different from what the tutorial indicates it should be. Instead of one line with 
+4004d6:       69 6e 2f 73 68 00 ef    imul
+My output is spread into multiple lines, which I guess must be some kind of breaking down of the operation. When I run “cat shell code” it is the same, however. Upon switching to Ubuntu it is the same.
+
+Learn Bad C in only 1 hour!
+The victim.c code seems fairly simple. All it does is take in a char array and print it. Of course, if we overflow the array, fun can happen…
+Also: It is impressive how extensive the protections that the OS puts in are these days. I can see how all the things we are disabling would make our ROP attack impossible: if we can’t find or execute our code, our attack is worthless. Successful exploits must be very complicated.
+I had to use “x86_64” for the architecture since my Arch install did not recognize the ‘arch’ architecture. My address was 0x7fffffffe5a0.
+After switching to a Ubuntu VM the code was successful!
+
+
+The importance of being patched:
+The code breaks down as follows:
+First, obtain the address of the code in memory using the ps command. Then use the program to print out the location of the char array. Find out the offset to know how far you have to write the buffer to overflow it. Just as with the example, my code was 88 away from the address.
+
+Next, the xxd script inserts the entire shell script as an input in the char array, making it execute. This attack does not seem to be successful, however. It does not let me enter more than one time, and seems to halt the program after this. It appears to be taking my name as input, however, as it says “Program “Sam” cannot be found”.
+
+Upon visual inspection, it seems my version of Ubuntu organizes the stack at a different position in memory than the example code assumed. Specifically, the tutorial assumed that it would be prefixed with 0x7fff, and that would be the offset that the stack pointer offsets from. (That’s why it does 0x7fff$sp+88). I noticed that sometimes my program would be running at 0x7ffe, however, and that is why it was failing. If I hardcode that prefix when running the exploit, I successfully get a shell.
+
