@@ -43,7 +43,7 @@ Also: It is impressive how extensive the protections that the OS puts in are the
 Here is a simple diagram of how our code is trying to work. We're attempting to turn:
 ```
  _______________
-|name array     |
+|name array     |<- &name
 |(64 bytes)     |
 |               |
 |_______________|
@@ -54,12 +54,13 @@ into:
 
 ```
  _______________
-|shellcode      |
+|shellcode      |<- &name
 |(32 bytes)     |
 |0 (32 bytes    |
 |_______________|
 |0 (8 bytes)  	|
-|&shellcode	|
+|&name	|
+
 ```
 
 _(Sam: I had to use “x86_64” for the architecture since my Arch install did not recognize the ‘arch’ architecture. My address was 0x7fffffffe5a0.)_
