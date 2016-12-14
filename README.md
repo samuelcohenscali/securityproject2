@@ -5,7 +5,7 @@ The aim of this project is to demonstrate a basic stack smashing attack on a sim
 
 For this project, I’m using a relatively newer installation of Arch. This means that I may run into trouble with, as the top of this tutorial indicates, newer versions of Linux. 
 
-#### Some assembly required
+### Some assembly required
 I began by compiling and running the provided shell.c code. Understanding the assembly code: it seems to load the string bin/sh into somewhere in memory, and then executes it by using the sys call command, which I think executes whatever is in a certain register. I also understand the idea of labeling and using the hex code 0xdeadbeef to mark where in memory it is.
 
 At first, I did not think that it was working at all. I began to do the rest and was running into trouble. Then I discovered that it was running the whole time and I’d been trying to do the rest of the commands from within the execvp shell! (It seemed to be missing some environment variables).
@@ -68,6 +68,8 @@ _(Sam: I had to use “x86_64” for the architecture since my Arch install did 
 That way, when the program finishes, it goes to execute the address of shellcode, instead of the return address.
 
 ### The importance of being patched:
+Now we try to exploit the code with ASLR re-enabled. This means that we cannot rely on the address of ```name``` being constant. Instead, we must calculate where it is every time in order to do the same thing as we did before.
+
 The code breaks down as follows:
 First, obtain the address of the code in memory using the ps command. Then use the program to print out the location of the char array. Find out the offset to know how far you have to write the buffer to overflow it. Just as with the example, my code was 88 away from the address.
 
@@ -76,7 +78,24 @@ Next, the xxd script inserts the entire shell script as an input in the char arr
 Note: Upon visual inspection, it seems my version of Ubuntu organizes the stack at a different position in memory than the example code assumed. Specifically, the tutorial assumed that it would be prefixed with ```0x7fff```, and that would be the offset that the stack pointer offsets from. (That’s why it does ``0x7fff$sp+88``). I noticed that sometimes my program would be running at ```0x7ffe```, however, and that is why it was failing. If I hardcode that prefix when running the exploit, I successfully get a shell. So we require a bit of visual inspection to find which script to run. 
 
 ### Go-go-gadgets:
-I used the revised code linked at the top of the page. Using this, I generated code based on the linked code. The variables we had were:
+For the last part, we try to defeat the no-execute protection on our system. That means we can no longer just stick the code we want onto the stack to run it; stack memory becomes unexecutable. We need to get more clever than that.
+
+What we can use is the system's own code! If we manipulate the return address of our program to run to already-loaded code, such as that from libc. Using our stack diagram:
+```
+ _______________
+|0 		|<- &name
+|		|
+|0 (32 bytes    |
+|_______________|
+|0 (8 bytes)  	|
+|&addr of gadget|
+|"/bin/sh"	|
+|&addr of gadget|
+|...		|
+```
+When the program returns, it does not jump to the right place. Instead, it jumps to a gadget, which is a chunk of code that performs things we want. All we want is to pop the bin/sh string onto a register, and then make a syscall such that it executes. We use libc's code for that, found the first assembly that fit, and jumped to it.
+
+Specifically, I used the revised code linked at the top of the page. Using this, I generated code based on the linked code. The variables we had were:
 
 ```
 buffer:		0x7fffffffe5a0										//Location of the char buffer 
