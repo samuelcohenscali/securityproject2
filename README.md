@@ -79,7 +79,7 @@ I used the revised code linked at the top of the page. Using this, I generated c
 ```
 buffer:		0x7fffffffe5a0
 libc: 		0x7ffff7a15000
-system:	0x7ffff7a15000 + 0x46590 = 0x7ffff7a5b590
+system:		0x7ffff7a15000 + 0x46590 = 0x7ffff7a5b590
 gadgets:	0x7ffff7a15000 + 0x22b9a = 0x7ffff7a37b9a
 bash: 		0x7fffffffe5a0 + 64d + 8d + 24d = 0x7fffffffe600 
 ```
