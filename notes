@@ -11,11 +11,15 @@ When I run objdump, the output is different from what the tutorial indicates it 
 4004d6:       69 6e 2f 73 68 00 ef    imul
 My output is spread into multiple lines, which I guess must be some kind of breaking down of the operation. When I run “cat shell code” it is the same, however. Upon switching to Ubuntu it is the same.
 
+My output is completely different for "there."
+
 Learn Bad C in only 1 hour!
 The victim.c code seems fairly simple. All it does is take in a char array and print it. Of course, if we overflow the array, fun can happen…
 Also: It is impressive how extensive the protections that the OS puts in are these days. I can see how all the things we are disabling would make our ROP attack impossible: if we can’t find or execute our code, our attack is worthless. Successful exploits must be very complicated.
 I had to use “x86_64” for the architecture since my Arch install did not recognize the ‘arch’ architecture. My address was 0x7fffffffe5a0.
 After switching to a Ubuntu VM the code was successful!
+
+The vulnerability attack was pretty straightforward. The 
 
 
 The importance of being patched:

