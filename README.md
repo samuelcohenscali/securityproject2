@@ -79,11 +79,11 @@ Note: Upon visual inspection, it seems my version of Ubuntu organizes the stack 
 I used the revised code linked at the top of the page. Using this, I generated code based on the linked code. The variables we had were:
 
 ```
-buffer:		0x7fffffffe5a0
-libc: 		0x7ffff7a15000
-system:		0x7ffff7a15000 + 0x46590 = 0x7ffff7a5b590
-gadgets:	0x7ffff7a15000 + 0x22b9a = 0x7ffff7a37b9a
-bash: 		0x7fffffffe5a0 + 64d + 8d + 24d = 0x7fffffffe600 
+buffer:		0x7fffffffe5a0										//Location of the char buffer 
+libc: 		0x7ffff7a15000										//Location of libc on our system
+system:		0x7ffff7a15000 + 0x46590 = 0x7ffff7a5b590			//Location of the system
+gadgets:	0x7ffff7a15000 + 0x22b9a = 0x7ffff7a37b9a			//Location of the desired gadget
+bash: 		0x7fffffffe5a0 + 64d + 8d + 24d = 0x7fffffffe600 	//Location of our /bin/sh string
 ```
 The code we used to use the ROP exploit was therefore:
 
