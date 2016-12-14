@@ -58,12 +58,13 @@ into:
 |(32 bytes)     |
 |0 (32 bytes    |
 |_______________|
-|RBP (8 bytes)  |
-|ReturnAddr     |
+|0 (8 bytes)  	|
+|&shellcode	|
 ```
 
-
 _(Sam: I had to use “x86_64” for the architecture since my Arch install did not recognize the ‘arch’ architecture. My address was 0x7fffffffe5a0.)_
+
+That way, when the program finishes, it goes to execute the address of shellcode, instead of the return address.
 
 ### The importance of being patched:
 The code breaks down as follows:
