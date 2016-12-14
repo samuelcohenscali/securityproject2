@@ -83,15 +83,15 @@ For the last part, we try to defeat the no-execute protection on our system. Tha
 What we can use is the system's own code! If we manipulate the return address of our program to run to already-loaded code, such as that from libc. Using our stack diagram:
 ```
  _______________
-|0 		|<- &name
-|		|
+|0 (32 bytes)	|<- &name
+|			|
 |0 (32 bytes    |
 |_______________|
 |0 (8 bytes)  	|
 |&addr of gadget|
-|"/bin/sh"	|
+|"/bin/sh"		|
 |&addr of gadget|
-|...		|
+|...			|
 ```
 When the program returns, it does not jump to the right place. Instead, it jumps to a gadget, which is a chunk of code that performs things we want. All we want is to pop the bin/sh string onto a register, and then make a syscall such that it executes. We use libc's code for that, found the first assembly that fit, and jumped to it.
 
