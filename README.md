@@ -73,7 +73,7 @@ Next, the xxd script inserts the entire shell script as an input in the char arr
 
 Note: Upon visual inspection, it seems my version of Ubuntu organizes the stack at a different position in memory than the example code assumed. Specifically, the tutorial assumed that it would be prefixed with ```0x7fff```, and that would be the offset that the stack pointer offsets from. (That’s why it does ``0x7fff$sp+88``). I noticed that sometimes my program would be running at ```0x7ffe```, however, and that is why it was failing. If I hardcode that prefix when running the exploit, I successfully get a shell. So we require a bit of visual inspection to find which script to run. 
 
-Go-go-gadgets:
+### Go-go-gadgets:
 I used the revised code linked at the top of the page. Using this, I generated code based on the linked code. The variables we had were:
 
 ```
