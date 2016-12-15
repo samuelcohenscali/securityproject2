@@ -1,0 +1,58 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf470
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;\red38\green38\blue38;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 I found it difficult to understand exactly how the code was injected at the byte level (this is mentioned in the 2 paragraphs before the section titled \'93The Importance of Being Patched\'94).\
+\
+To start, it is very important to know EXACTLY what the stack of our program looks like. \
+First, at the bottom is our return address, which is 8 bytes long (because of 64-bit Linux).  \
+Second, the old base pointer register (RBP) is stored on the stack. This is also 8 bytes long. \
+Lastly, all local variables are stored. Since the only local variable of the victim.c code is the 64 character name buffer, this is only local variable stored. This takes up 64 bytes.\
+Our stack now looks like this:\
+\pard\pardeftab720\sl380\partightenfactor0
+\cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2  _______________\
+|name array     |<- &name\
+|(64 bytes)     |\
+|               |\
+|_______________|\
+|RBP (8 bytes)  |\
+|_______________|\
+|ReturnAddr     |\
+|(8 bytes)      |\
+|_______________|\
+\
+(Note: a similar image is also in our README)\
+\
+So in all, we need to account for 80 bytes (64+8+8). \
+We rounded up our the size of the assembly code we wanted to execute (29 bytes) to the smallest multiple of 8 which is 32. So this is what we called our shellcode which is now 32 bytes long. \
+So first we use the shellcode to fill up the first 32 bytes of the name buffer (48 bytes remiaining). \
+Next, we wrote 80 zeroes, which is 40 zero bytes (since every 2 hex digits comprises one byte). The first 32 of these 40 bytes fills out the rest of the name buffer. The reamianing 8 overwrites the address of the RBP register with zeroes. It doesn\'92t matter that we no longer have this location, since our goal is to only run our shellcode. There are now only 8 byte remaining.\
+Lastly, we overwrite the 8 byte return address with our 8 byte address of our shellcode, which is just the address of where the beginning of the name buffer is stored (which we got from the print statement that displays the address of the name buffer in victim.c). \
+Our program now \'93returns\'94 to the beginning of the name buffer where our shellcode lies. \
+\
+Our stack should now look like this:\
+\
+\pard\pardeftab720\sl380\partightenfactor0
+\cf2  _______________\
+|shellcode      |<- &name\
+|(32 bytes)     |\
+|               |\
+|0 (32 bytes)   |\
+|_______________|\
+|0 (8 bytes)    |\
+|_______________|\
+|&name (8 bytes)|\
+|_______________|\
+\
+\pard\pardeftab720\sl380\partightenfactor0
+\cf3 \outl0\strokewidth0 (Note: a similar image is also in our README)\cf2 \outl0\strokewidth0 \strokec2 \
+\pard\pardeftab720\sl380\partightenfactor0
+\cf2 \
+\pard\pardeftab720\sl380\partightenfactor0
+\cf2 \
+\
+\
+}
