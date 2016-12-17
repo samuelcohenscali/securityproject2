@@ -3,10 +3,20 @@
 
 The aim of this project is to demonstrate a basic stack smashing attack on a simple Hello World program. Though this is simple, it's also a good overview how a buffer overflow can be used to gain shell access, and also walks us through the protections the operating system has to protect from these attacks.
 
-For this project, I’m using a relatively newer installation of Arch. This means that I may run into trouble with, as the top of this tutorial indicates, newer versions of Linux. 
+For this project, I’m using a relatively newer installation of Arch. This means that I may run into trouble with, as the top of this tutorial indicates, newer versions of Linux.
+
+> Throughout each step, there will be an indentation indicating a script or
+> command that executes everything mentioned in that step.
 
 ### Some assembly required
-I began by compiling and running the provided shell.c code. Understanding the assembly code: it seems to load the string bin/sh into somewhere in memory, and then executes it by using the sys call command, which I think executes whatever is in a certain register. I also understand the idea of labeling and using the hex code 0xdeadbeef to mark where in memory it is.
+I began by compiling and running the provided shell.c code.
+
+> Use the provided Makefile:
+```
+make
+```
+
+Understanding the assembly code: it seems to load the string bin/sh into somewhere in memory, and then executes it by using the sys call command, which I think executes whatever is in a certain register. I also understand the idea of labeling and using the hex code 0xdeadbeef to mark where in memory it is.
 
 At first, I did not think that it was working at all. I began to do the rest and was running into trouble. Then I discovered that it was running the whole time and I’d been trying to do the rest of the commands from within the execvp shell! (It seemed to be missing some environment variables).
 
@@ -34,6 +44,11 @@ The entire program dumps to:
   4004c3:	2f                   	(bad)  
   4004c4:	73 68                	jae    40052e <__libc_csu_init+0x4e>
 	...
+```
+
+> The necessary shellcode file can be produced by running:
+```
+./theshellgame.sh
 ```
 
 ### Learn Bad C in only 1 hour!
