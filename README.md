@@ -82,6 +82,15 @@ _(Sam: I had to use “x86_64” for the architecture since my Arch install did 
 
 That way, when the program finishes, it goes to execute the address of shellcode, instead of the return address.
 
+> Run the following script:
+```
+./learnbadc_in1hour.sh
+```
+Hit enter until you are greated with "Hello, �_H1��;H1�H1������/bin/sh!"
+Success! you are in a shell that was executed unintentionally by the hello
+world program. Run some commands. To exit the shell, run exit a couple of
+times, or hit CTRL-C
+
 ### The importance of being patched:
 Now we try to exploit the code with ASLR re-enabled. This means that we cannot rely on the address of ```name``` being constant. Instead, we must calculate where it is every time in order to do the same thing as we did before.
 
