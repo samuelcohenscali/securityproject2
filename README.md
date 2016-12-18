@@ -101,6 +101,19 @@ Next, the xxd script inserts the entire shell script as an input in the char arr
 
 Note: Upon visual inspection, it seems my version of Ubuntu organizes the stack at a different position in memory than the example code assumed. Specifically, the tutorial assumed that it would be prefixed with ```0x7fff```, and that would be the offset that the stack pointer offsets from. (That’s why it does ``0x7fff$sp+88``). I noticed that sometimes my program would be running at ```0x7ffe```, however, and that is why it was failing. If I hardcode that prefix when running the exploit, I successfully get a shell. So we require a bit of visual inspection to find which script to run. 
 
+>This doesn't work everytime because of the prefix not always being 0x7fff
+```
+./theimportanceofbeingpatched.sh
+```
+When the prefix is 0x7fff, it works. The output is the same as when it doesn't
+work, but yo can time commands and the other terminal will be running it. To
+see the action, in another terminal run:
+```
+tmux attach -t $USER
+```
+lol. When you are done having fun, go back to the original terminal and exit
+with CTRL-D
+
 ### Go-go-gadgets:
 For the last part, we try to defeat the no-execute protection on our system. That means we can no longer just stick the code we want onto the stack to run it; stack memory becomes unexecutable. We need to get more clever than that.
 
