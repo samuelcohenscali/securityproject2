@@ -89,7 +89,7 @@ That way, when the program finishes, it goes to execute the address of shellcode
 Hit enter until you are greated with "Hello, �_H1��;H1�H1������/bin/sh!"
 Success! you are in a shell that was executed unintentionally by the hello
 world program. Run some commands. To exit the shell, run exit a couple of
-times, or hit CTRL-C
+times, or hit CTRL-D
 
 ### The importance of being patched:
 Now we try to exploit the code with ASLR re-enabled. This means that we cannot rely on the address of ```name``` being constant. Instead, we must calculate where it is every time in order to do the same thing as we did before.
@@ -155,4 +155,4 @@ Which loads the right addresses onto the stack! This allows the program to retur
 ```
 When you are asked for your name, just press enter. You'll be greated by the
 hello world program, but it returns to sh, which is waiting for your command.
-When you are done, CTRL-D out of there
+When you are done, CTRL-D out of there.
