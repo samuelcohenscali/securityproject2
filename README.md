@@ -148,3 +148,11 @@ The code we used to use the ROP exploit was therefore:
 ```
 
 Which loads the right addresses onto the stack! This allows the program to return to the gadget instead of the OS, which executes our program!
+
+> Run the following command:
+```
+./gogadgetgo.sh
+```
+When you are asked for your name, just press enter. You'll be greated by the
+hello world program, but it returns to sh, which is waiting for your command.
+When you are done, CTRL-D out of there
